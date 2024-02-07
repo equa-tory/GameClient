@@ -31,6 +31,7 @@ public class Client : MonoBehaviour
 
     public void ConnectToServer()
     {
+        IntitializeClientData();
         tcp.Connect();
     }
 
@@ -67,6 +68,21 @@ public class Client : MonoBehaviour
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
         }
 
+        public void SendData(Packet _packet)
+        {
+            try
+            {
+                if(socket != null)
+                {
+                    stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
+                }
+            }
+            catch (Exception _ex)
+            {
+                Debug.Log($"Error sending data to server via TCP: {_ex}");
+            }
+        }
+
         private void ReceiveCallback(IAsyncResult _result)
         {
             try
@@ -90,7 +106,7 @@ public class Client : MonoBehaviour
             }
         }
 
-        private bool HandeData(byte[] _data)
+        private bool HandleData(byte[] _data)
         {
             int _packetLength = 0;
 
@@ -127,6 +143,13 @@ public class Client : MonoBehaviour
                     }
                 }
             }
+
+            if(_packetLength <= 1)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 
@@ -136,6 +159,7 @@ public class Client : MonoBehaviour
         {
             { (int)ServerPackets.welcome, ClientHandle.Welcome }
         };
+        Debug.Log("Initialized packets.");
     }
 
 }

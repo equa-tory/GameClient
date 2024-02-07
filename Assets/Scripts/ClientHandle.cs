@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
 
-public class Client : MonoBehaviour
+public class ClientHandle : MonoBehaviour
 {
     public static void Welcome(Packet _packet)
     {
@@ -12,8 +12,8 @@ public class Client : MonoBehaviour
         int _myId = _packet.ReadInt();
 
         Debug.Log($"Message from server: {_msg}");
-        Client.Instance.myId = _msg;
-        // TODO: send welcome received packet
+        Client.Instance.myId = _myId;
+        ClientSend.WelcomeReceived();
     }
 
 }
