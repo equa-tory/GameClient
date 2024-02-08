@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
 
@@ -167,7 +168,7 @@ public class Client : MonoBehaviour
 
         public void Connect(int _localPort)
         {
-            socket = new UdpClient(_localPort)
+            socket = new UdpClient(_localPort);
 
             socket.Connect(endPoint);
             socket.BeginReceive(ReceiveCallback, null);
@@ -194,7 +195,7 @@ public class Client : MonoBehaviour
             }
         }
 
-        private void ReceiveCallback(IASyncResult _result)
+        private void ReceiveCallback(IAsyncResult _result)
         {
             try
             {
@@ -228,7 +229,7 @@ public class Client : MonoBehaviour
                 using (Packet _packet = new Packet(_data))
                 {
                     int _packetId = _packet.ReadInt();
-                    packetHandlers[_packetId](_packet);
+                    packageHandlers[_packetId](_packet);
                 }
             });
         }
@@ -240,7 +241,7 @@ public class Client : MonoBehaviour
         packageHandlers = new Dictionary<int, PacketHandler>()
         {
             { (int)ServerPackets.welcome, ClientHandle.Welcome },
-            { (int)ServerPackets.udp, ClientHandle.UDPTest }
+            { (int)ServerPackets.udpTest, ClientHandle.UDPTest }
         };
         Debug.Log("Initialized packets.");
     }
