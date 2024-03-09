@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            _player = Instantiate(localPlayerPrefab, _position, _rotation);
+            _player = Instantiate(playerPrefab, _position, _rotation);
         }
 
         _player.GetComponent<PlayerManager>().id = _id;
